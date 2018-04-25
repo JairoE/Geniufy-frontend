@@ -1,29 +1,21 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import renderHTML from 'react-render-html';
 import './App.css';
+import Search from './components/Search'
+import Lyrics from './components/Lyrics'
 
 class App extends Component {
   state = {
-    song: false
+    search: false,
+    song: null
   }
-  componentDidMount(){
-    fetch('http://localhost:3000/api/v1/songs',{
-      method: "POST",
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': "application/json"
-      },
-      body: JSON.stringify({
-        song: "The end",
-        artist: "the doors"
-      })
-    })
-    .then(res => res.json())
-    .then(json => {
-      this.setState({
-        song: json
-      })
+
+  searchHandler = (event) =>{
+    event.preventDefault()
+    let info = {songname: event.target.children[0].value, artist: event.target.children[2].value}
+    this.setState({
+      search: true,
+      song: info
     })
   }
 
@@ -33,12 +25,10 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">Nonchalant</h1>
         </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        {this.state.song ? renderHTML("<div id='lyrics'>" + this.state.song.lyrics + "</div>") : null}
+        {!this.state.search ? <Search searchHandler={this.searchHandler} /> : null}
+        {this.state.search ? <Lyrics song={this.state.song} /> : null}
       </div>
     );
   }
