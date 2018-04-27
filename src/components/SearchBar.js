@@ -1,27 +1,46 @@
 import React from 'react'
 import { searchHandler } from '../actions/actions.js'
 import { connect } from 'react-redux'
+import { Form, Button, Input } from 'semantic-ui-react';
 
-const SearchBar = (props) => {
-  const getSongName = (event) => {
+class SearchBar extends React.Component{
+  state={
+    song: "",
+    artist: ""
+  }
+  getSongName = (event) => {
     event.preventDefault()
-    props.dispatchSearchHandler(event.target)
+    this.props.dispatchSearchHandler(this.state.song, this.state.artist)
   }
 
-  return(
-    <form onSubmit={getSongName}>
-      <input placeholder="Enter song name"/>
-      <br />
-      <input placeholder="Enter artist name"/>
-      <br />
-      <button type="submit"> Search </button>
-    </form>
-  )
+  updateSongInput = (event) =>{
+    this.setState({
+      song: event.target.value
+    })
+  }
+
+  updateArtistInput = (event) =>{
+    this.setState({
+      artist: event.target.value
+    })
+  }
+
+  render(){
+    return(
+      <Form onSubmit={this.getSongName}>
+        <Input placeholder="Enter song name" onChange={this.updateSongInput}/>
+        <br />
+        <Input placeholder="Enter artist name" onChange={this.updateArtistInput}/>
+        <br />
+        <Button type="submit"> Search </Button>
+      </Form>
+    )
+  }
 }
 
 const mapDispatchToProps = dispatch =>{
   return({
-    dispatchSearchHandler: form => dispatch(searchHandler(form))
+    dispatchSearchHandler: (song,artist) => dispatch(searchHandler(song,artist))
   })
 }
 

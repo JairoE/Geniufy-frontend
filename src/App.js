@@ -3,12 +3,16 @@ import logo from './logo.svg';
 import './App.css';
 import SearchBar from './components/SearchBar'
 import Lyrics from './components/Lyrics'
+import { connect } from 'react-redux'
+import { Grid, Segment, Divider} from 'semantic-ui-react'
+import AnnotationForm from './components/AnnotationForm'
+import ShowAnnotation from './components/showAnnotation'
 
 class App extends Component {
-  state = {
-    search: false,
-    song: null
-  }
+  // state = {
+  //   search: false,
+  //   song: null
+  // }
 
   // searchHandler = (event) =>{
   //   event.preventDefault()
@@ -27,8 +31,16 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Nonchalant</h1>
         </header>
-        {!this.state.search ? <SearchBar searchHandler={this.searchHandler} /> : null}
-        {this.state.search ? <Lyrics song={this.state.song} /> : null}
+        {!this.props.searchInfo ? <SearchBar /> : null}
+        <Grid columns={2}>
+          <Grid.Column width={10}>
+            {this.props.searchInfo ? <Lyrics /> : null}
+          </Grid.Column>
+          <Grid.Column width={6}>
+            {this.props.addingAnnotation ? <AnnotationForm /> : null}
+            {this.props.showAnnotation ? <ShowAnnotation /> : null}
+          </Grid.Column>
+        </Grid>
       </div>
     );
   }
@@ -36,8 +48,10 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return{
-    songInfo: state.songInfo
+    searchInfo: state.searchInfo,
+    addingAnnotation: state.annotation.addingAnnotation,
+    showAnnotation: state.annotation.showAnnotationText
   }
 }
 
-export default App;
+export default connect(mapStateToProps)(App);

@@ -1,6 +1,12 @@
 a{
-  background-color: #d3d3d3;
+  color: black !important;
+  background-color: #d3d3d3 !important;
 }
 a:hover {
-  background-color: #f47676;
+  background-color: #f47676 !important;
+}
+
+#lyrics-container{
+  font-size: 20px;
+  line-height: 1.5;
 }
