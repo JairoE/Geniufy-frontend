@@ -7,6 +7,7 @@ const defaultState = {
   },
   annotation:{
     addingAnnotation: false,
+    annotationHeight: null,
     highlightedText: null,
     showAnnotationText: false
   }
@@ -25,7 +26,9 @@ export default function rootReducer(state = defaultState, action) {
       return{
         ...state, annotation: {
           addingAnnotation: true,
-          highlightedText: action.payload.highlightedText
+          annotationHeight: action.payload.annotationHeight,
+          highlightedText: action.payload.highlightedText,
+          showAnnotationText: false
         }
       }
     case "SUBMIT_ANNOTATION":
@@ -62,7 +65,9 @@ export default function rootReducer(state = defaultState, action) {
         ...state,
         annotation: {
           ...state.annotation,
-          showAnnotationText: action.payload.annotation
+          showAnnotationText: action.payload.annotation.annotation,
+          annotationHeight: action.payload.height,
+          addingAnnotation: false
         }
       }
     case "LOADING_SONG":
@@ -80,6 +85,13 @@ export default function rootReducer(state = defaultState, action) {
         }
       }
     default:
-      return state;
+      return {...state,
+        annotation: {
+          addingAnnotation: false,
+          annotationHeight: null,
+          highlightedText: null,
+          showAnnotationText: false
+        }
+      };
   }
 }

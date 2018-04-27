@@ -9,19 +9,6 @@ import AnnotationForm from './components/AnnotationForm'
 import ShowAnnotation from './components/showAnnotation'
 
 class App extends Component {
-  // state = {
-  //   search: false,
-  //   song: null
-  // }
-
-  // searchHandler = (event) =>{
-  //   event.preventDefault()
-  //   let info = {songname: event.target.children[0].value, artist: event.target.children[2].value}
-  //   this.setState({
-  //     search: true,
-  //     song: info
-  //   })
-  // }
 
   render() {
 
@@ -37,8 +24,10 @@ class App extends Component {
             {this.props.searchInfo ? <Lyrics /> : null}
           </Grid.Column>
           <Grid.Column width={6}>
-            {this.props.addingAnnotation ? <AnnotationForm /> : null}
+          <div id="right-column-container">
+            {this.props.addingAnnotation ? <AnnotationForm />: null}
             {this.props.showAnnotation ? <ShowAnnotation /> : null}
+          </div>
           </Grid.Column>
         </Grid>
       </div>

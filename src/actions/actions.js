@@ -8,7 +8,7 @@ export let searchHandler = (song, artist) => {
   })
 }
 
-export let highlightHandler = (selectedObject) => {
+export let highlightHandler = (selectedObject, height) => {
 
   let typeString = "ALREADY_HIGHLIGHTED"
   if (selectedObject.toString().length > 0 && selectedObject.anchorNode.parentNode.nodeName !== "A"){
@@ -17,7 +17,8 @@ export let highlightHandler = (selectedObject) => {
   return({
     type: typeString,
     payload:{
-      highlightedText: selectedObject.toString()
+      highlightedText: selectedObject.toString(),
+      annotationHeight: height
     }
   })
 }
@@ -60,12 +61,12 @@ export function fetchSong(searchInfo){
   }
 }
 
-export function fetchAnnotation(songId, annotationId){
+export function fetchAnnotation(songId, annotationId, annotationHeight){
   return (dispatch) => {
     return fetch(`http://localhost:3000/api/v1/songs/${songId}/annotations/${annotationId}`)
           .then(res=>res.json())
           .then(json=>{
-            dispatch({type: "SHOW_ANNOTATION", payload: json})
+            dispatch({type: "SHOW_ANNOTATION", payload: { annotation: json, height: annotationHeight}})
           })
   }
 }
