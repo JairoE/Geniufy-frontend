@@ -1,10 +1,9 @@
 const defaultState = {
   user: null,
-  searchInfo: false,
-  song: {
-    loading: false,
-    songObj: null
-  },
+  selectedSong: false,
+  searching: false,
+  searchResults: null,
+  song: null,
   annotation:{
     addingAnnotation: false,
     annotationHeight: null,
@@ -20,7 +19,19 @@ export default function rootReducer(state = defaultState, action) {
     case "SEARCH_SONG":
       let info = {songname: action.payload.songName, artist: action.payload.artistName}
       return{
-        ...state, searchInfo: info
+        ...state, selectedSong: info
+      }
+    case "SEARCHING_SONGS":
+      return{...state,
+        selectedSong: false,
+        searching: true,
+        searchResults: null
+      }
+    case "FOUND_SONGS":
+      return{...state,
+        searching: false,
+        searchResults: action.payload,
+        annotation:{}
       }
     case "ANNOTATING":
       return{
@@ -32,12 +43,17 @@ export default function rootReducer(state = defaultState, action) {
         }
       }
     case "SUBMIT_ANNOTATION":
-      let annotatedLyrics = state.song.songObj.lyrics
+      let annotatedLyrics = state.song.lyrics
       let selectedText = state.annotation.highlightedText.replace(/\n/g, "<br />")
-      let wrappedText = `<a id=${action.payload.annotationId} onClick={this.fetchAnnotation}>` + selectedText + "</a>"
+      let wrappedText = `<a id=${action.payload.annotationId} onClick={}>` + selectedText + "</a>"
       let reg = new RegExp(selectedText, "g")
-      annotatedLyrics = annotatedLyrics.replace(reg, wrappedText)
-      fetch(`http://localhost:3000/api/v1/songs/${state.song.songObj.id}`,{
+
+      if(annotatedLyrics.match(reg) === null){
+        annotatedLyrics = annotatedLyrics.replace(selectedText, wrappedText)
+      }else{
+        annotatedLyrics = annotatedLyrics.replace(reg, wrappedText)
+      }
+      fetch(`http://localhost:3000/api/v1/songs/${state.song.id}`,{
         method: "PATCH",
         headers: {
           Accept: 'application/json',
@@ -49,12 +65,9 @@ export default function rootReducer(state = defaultState, action) {
       })
       return{
         ...state,
-        song: {
-          loading: true,
-          songObj: {...state.song.songObj,
+        song: {...state.song,
             lyrics: annotatedLyrics
           },
-        },
         annotation: {
           addingAnnotation: false,
           highlightedText: null
@@ -72,17 +85,13 @@ export default function rootReducer(state = defaultState, action) {
       }
     case "LOADING_SONG":
       return{...state,
-        song: {
-          loading: true,
-          songObj: null
-        }
+        selectedSong: true,
+        song: null
       }
     case "LOAD_LYRICS":
       return{...state,
-        song: {
-          loading: true,
-          songObj: action.payload
-        }
+        selectedSong: true,
+        song: action.payload
       }
     default:
       return {...state,

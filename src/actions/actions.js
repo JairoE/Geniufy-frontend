@@ -1,12 +1,12 @@
-export let searchHandler = (song, artist) => {
-  return({
-    type: "SEARCH_SONG",
-    payload:{
-      songName: song,
-      artistName: artist
-    }
-  })
-}
+// export let searchHandler = (song, artist) => {
+//   return({
+//     type: "SEARCH_SONG",
+//     payload:{
+//       songName: song,
+//       artistName: artist
+//     }
+//   })
+// }
 
 export let highlightHandler = (selectedObject, height) => {
 
@@ -42,7 +42,7 @@ export function submitAnnotation(annotationText, songId){
   }
 }
 
-export function fetchSong(searchInfo){
+export function fetchSong(api_link){
   return (dispatch) => {
     dispatch({ type: "LOADING_SONG"});
     return fetch('http://localhost:3000/api/v1/songs',{
@@ -52,12 +52,33 @@ export function fetchSong(searchInfo){
             'Content-Type': "application/json"
           },
           body: JSON.stringify({
-            song: searchInfo.songname,
-            artist: searchInfo.artist
+            api_link: api_link,
           })
         })
         .then(res => res.json())
-        .then(json => dispatch({type: "LOAD_LYRICS", payload: json}));
+        .then(json => {
+          dispatch({type: "LOAD_LYRICS", payload: json})
+        });
+  }
+}
+
+export function fetchInput(input){
+  return (dispatch) => {
+    dispatch({type: "SEARCHING_SONGS"});
+    return fetch('http://localhost:3000/api/v1/fetchSongs',{
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': "application/json"
+      },
+      body: JSON.stringify({
+        input: input,
+      })
+    })
+    .then(res => res.json())
+    .then(json => {
+      dispatch({type: "FOUND_SONGS", payload: json})
+    });
   }
 }
 

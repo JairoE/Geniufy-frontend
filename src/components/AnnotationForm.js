@@ -12,9 +12,8 @@ class AnnotationForm extends React.Component{
   }
 
   render(){
-    console.log(this.props)
     return(
-      <Segment style={{top: `${this.props.annotationHeight-160}px`}}>
+      <Segment style={{top: `${this.props.annotationHeight-60}px`}}>
           <Form onSubmit={this.addAnnotation}>
             <TextArea placeholder="Add annotation here!" />
             <Button> Submit Annotation </Button>
@@ -32,7 +31,7 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = state => {
   return {
-    songId: state.song.songObj.id,
+    songId: state.song.id,
     annotationHeight: state.annotation.annotationHeight
   }
 }

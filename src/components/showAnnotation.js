@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 const ShowAnnotation = props => {
 
   return(
-    <Segment style={{top: `${props.annotationHeight-160}px`}}>
+    <Segment style={{top: `${props.annotationHeight-60}px`}}>
       <Comment.Group>
         <Comment>
           <Comment.Avatar src={require('../img/userIcon.jpg')} />

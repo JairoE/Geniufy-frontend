@@ -3,10 +3,13 @@ a{
   background-color: #d3d3d3 !important;
 }
 a:hover {
-  background-color: #f47676 !important;
+  background-color: #1db954 !important;
 }
 
 #lyrics{
   font-size: 20px;
   line-height: 1.5;
+}
+
+#lyrics-container{
 }
