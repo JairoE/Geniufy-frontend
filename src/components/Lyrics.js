@@ -3,14 +3,14 @@ import renderHTML from 'react-render-html';
 import { highlightHandler, fetchAnnotation} from '../actions/actions.js'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
-import { Dimmer, Loader, Segment, Image, Header} from 'semantic-ui-react'
+import { Segment, Header, Grid} from 'semantic-ui-react'
 import '../css/lyrics.css'
-import { CircleLoader } from 'react-spinners'
+import AnnotationForm from './AnnotationForm';
+import ShowAnnotation from './showAnnotation';
 
 class Lyrics extends React.Component{
 
   highlightHandler = (event) => {
-    console.log(window.getSelection().toString())
     this.props.dispatchHighlightHandler(window.getSelection(), event.pageY)
   }
 
@@ -29,36 +29,30 @@ class Lyrics extends React.Component{
         return tag
       }
     })
-    return React.cloneElement(lyrics, lyrics.props, newtags)
-  }
+    let Lyrics = React.cloneElement(lyrics, lyrics.props, newtags)
 
-  loading(){
-    return (
-      <div>
-        <Loader active inverted size="small">"Searching..."</Loader>
-        <Image floated={"left"} src={require('../img/loading.png')}/>
-      </div>
-      )
+    return (<div id="lyrics-container" onMouseUp={this.highlightHandler}>
+              <Header as="h3" attached='top'>
+              {this.props.song.name} by {this.props.song.artist}
+              </Header>
+              <Segment attached style={{overflow: 'auto', maxHeight: 850 }}>{Lyrics}</Segment>
+              </div>
+          )
   }
 
   render(){
-    let Lyrics = "loading"
-    if(this.props.song !== null){
-      Lyrics = this.generateLyrics()
-    }
-    return(
-      <div id="lyrics-container" onMouseUp={this.highlightHandler}>
-      {this.props.song !== null
-        ? ( <div>
-            <Header as="h3" attached='top'>
-            {this.props.song.name} by {this.props.song.artist}
-            </Header>
-            <Segment attached>{Lyrics}</Segment>
-            </div>
-          )
-        : <CircleLoader />}
 
-      </div>
+    return(<Grid columns={3} id="lyrics-grid">
+        <Grid.Column width={10} textAlign={"center"}>
+          {this.generateLyrics()}
+        </Grid.Column>
+        <Grid.Column width={4}>
+        <div id="right-column-container">
+          {this.props.addingAnnotation ? <AnnotationForm />: null}
+          {this.props.showAnnotation ? <ShowAnnotation /> : null}
+        </div>
+        </Grid.Column>
+      </Grid>
     )
   }
 }
@@ -72,8 +66,9 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = state => {
   return{
-    selectedSong: state.selectedSong,
-    song: state.song
+    song: state.song,
+    addingAnnotation: state.annotation.addingAnnotation,
+    showAnnotation: state.annotation.showAnnotation
   }
 }
 

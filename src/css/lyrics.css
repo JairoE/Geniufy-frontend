@@ -1,8 +1,12 @@
-a{
+a.annotation{
   color: black !important;
   background-color: #d3d3d3 !important;
 }
-a:hover {
+a.annotation:hover {
+  background-color: #1db954 !important;
+}
+
+a.annotation:focus{
   background-color: #1db954 !important;
 }
 

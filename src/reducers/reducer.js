@@ -1,5 +1,6 @@
 const defaultState = {
   user: null,
+  signedIn: false,
   selectedSong: false,
   searching: false,
   searchResults: null,
@@ -8,8 +9,11 @@ const defaultState = {
     addingAnnotation: false,
     annotationHeight: null,
     highlightedText: null,
-    showAnnotationText: false
-  }
+    showAnnotation: false
+  },
+  playlists: null,
+  currentPlaylistTracks: null,
+  loadingTracks: false
 }
 
 
@@ -25,12 +29,14 @@ export default function rootReducer(state = defaultState, action) {
       return{...state,
         selectedSong: false,
         searching: true,
-        searchResults: null
+        searchResults: null,
+        song: null
       }
     case "FOUND_SONGS":
       return{...state,
         searching: false,
         searchResults: action.payload,
+        song: null,
         annotation:{}
       }
     case "ANNOTATING":
@@ -39,13 +45,13 @@ export default function rootReducer(state = defaultState, action) {
           addingAnnotation: true,
           annotationHeight: action.payload.annotationHeight,
           highlightedText: action.payload.highlightedText,
-          showAnnotationText: false
+          showAnnotation: false
         }
       }
     case "SUBMIT_ANNOTATION":
       let annotatedLyrics = state.song.lyrics
       let selectedText = state.annotation.highlightedText.replace(/\n/g, "<br />")
-      let wrappedText = `<a id=${action.payload.annotationId} onClick={}>` + selectedText + "</a>"
+      let wrappedText = `<a class="annotation" id=${action.payload.annotationId} onClick={}>` + selectedText + "</a>"
       let reg = new RegExp(selectedText, "g")
 
       if(annotatedLyrics.match(reg) === null){
@@ -74,11 +80,12 @@ export default function rootReducer(state = defaultState, action) {
         }
       }
     case "SHOW_ANNOTATION":
+      console.log(state)
       return {
         ...state,
         annotation: {
           ...state.annotation,
-          showAnnotationText: action.payload.annotation.annotation,
+          showAnnotation: action.payload.annotationAndUser,
           annotationHeight: action.payload.height,
           addingAnnotation: false
         }
@@ -93,13 +100,43 @@ export default function rootReducer(state = defaultState, action) {
         selectedSong: true,
         song: action.payload
       }
+    case "STARTING_SIGN_IN":
+      return{...state,
+        signedIn: true
+      }
+    case "SPOTIFY_SIGN_IN":
+      // localStorage
+      return{...state,
+        user: action.payload.user
+      }
+    case "FETCHED_PLAYLISTS":
+      return{
+        ...state,
+        playlists: action.payload,
+        currentPlaylistTracks: null
+      }
+    case "LOADING_TRACKS":
+      return{
+        ...state,
+        loadingTracks: true,
+        playlists: null
+      }
+    case "GET_PLAYLIST_TRACKS":
+      return{
+        ...state,
+        loadingTracks: false,
+        playlists: null,
+        currentPlaylistTracks: action.payload
+      }
+    case "LOGOUT":
+      return defaultState
     default:
       return {...state,
         annotation: {
           addingAnnotation: false,
           annotationHeight: null,
           highlightedText: null,
-          showAnnotationText: false
+          showAnnotation: false
         }
       };
   }

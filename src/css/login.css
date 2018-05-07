@@ -1,0 +1,21 @@
+body{
+  background-color: #FFFFF0;
+}
+
+#Geniufy{
+  font-family: 'Bangers', cursive;
+  text-align: center;
+  margin:0 auto;
+  margin-top: 5%;
+}
+
+h1{
+  font-size: 200px;
+  font-family: 'Bungee Shade', cursive;
+}
+
+#login{
+  width:400px;
+  margin:0 auto;
+  margin-top: 3% ;
+}

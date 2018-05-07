@@ -1,17 +1,17 @@
 import React from 'react';
-import { Button, Comment, Form, Segment} from 'semantic-ui-react';
+import { Comment, Segment} from 'semantic-ui-react';
 import { connect } from 'react-redux';
 // import { bindActionCreators } from 'redux';
 
 const ShowAnnotation = props => {
 
   return(
-    <Segment style={{top: `${props.annotationHeight-60}px`}}>
+    <Segment style={{top: `${props.annotationHeight-140}px`}}>
       <Comment.Group>
         <Comment>
           <Comment.Avatar src={require('../img/userIcon.jpg')} />
           <Comment.Content>
-            <Comment.Author as="p">Jairo</Comment.Author>
+            <Comment.Author as="p">{props.annotationUser}</Comment.Author>
             <Comment.Text> <p>{props.annotationText}</p> </Comment.Text>
           </Comment.Content>
         </Comment>
@@ -22,7 +22,8 @@ const ShowAnnotation = props => {
 
 const mapStateToProps = state => {
   return {
-    annotationText: state.annotation.showAnnotationText,
+    annotationText: state.annotation.showAnnotation.annotation.annotation,
+    annotationUser: state.annotation.showAnnotation.username,
     annotationHeight: state.annotation.annotationHeight
   }
 }

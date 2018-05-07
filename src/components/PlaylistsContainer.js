@@ -1,0 +1,67 @@
+import React from 'react'
+import { Button, Segment, Divider, Card, Image, Grid } from 'semantic-ui-react'
+import { bindActionCreators } from 'redux';
+import { getPlaylists, getPlaylistTracks } from '../actions/actions.js'
+import { connect } from 'react-redux'
+import { ScaleLoader } from 'react-spinners';
+import Playlist from './Playlist'
+import '../css/playlists.css'
+
+
+class PlaylistsContainer extends React.Component{
+
+  getPlaylist = (event) => {
+    this.props.dispatchGetPlaylistTracks(event.target.id)
+  }
+
+  showPlaylists = () => {
+    return this.props.playlists.map((playlist)=>{
+      let name = playlist.owner.display_name
+      name === null ? name = playlist.owner.id : name = name
+      return <Grid.Column>
+          <Card>
+        <Image src={playlist.images[0].url} />
+        <Card.Header>
+          {playlist.name}
+        </Card.Header>
+        <Card.Meta>
+          <span> Playlist created by {name}</span>
+        </Card.Meta>
+        <Button id={`${playlist.href}`} onClick={this.getPlaylist}>Play Playlist with Lyrics </Button>
+      </Card>
+      </Grid.Column>
+    })
+  }
+  render(){
+    console.log(this.props)
+    return (
+      <div id="playlists">
+        <Segment.Group>
+          <Segment padded>
+            {this.props.playlists === null ? <Button color={"green"} onClick={this.props.dispatchGetPlaylists}>Get Playlists</Button> : null}
+            {this.props.playlists !== null ? <Grid columns={3}> {this.showPlaylists()} </Grid> : null}
+            {this.props.loadingtracks ? <ScaleLoader size={1000} /> : null}
+          </Segment>
+          {this.props.tracks !== null ? <Segment compact={true}> <Playlist /> </Segment>: null}
+        </Segment.Group>
+      </div>
+    )
+  }
+}
+
+const mapStateToProps = state => {
+  return{
+    user: state.user,
+    playlists: state.playlists,
+    loadingtracks: state.loadingTracks,
+    tracks: state.currentPlaylistTracks
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return{
+    dispatchGetPlaylists: bindActionCreators(getPlaylists, dispatch),
+    dispatchGetPlaylistTracks: bindActionCreators(getPlaylistTracks, dispatch)
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(PlaylistsContainer)

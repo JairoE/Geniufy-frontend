@@ -8,7 +8,8 @@ import { Provider } from 'react-redux';
 import rootReducer from './reducers/reducer';
 import thunk from 'redux-thunk';
 import 'semantic-ui-css/semantic.min.css';
-import { BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter as Router, Route, withRouter, Switch} from 'react-router-dom';
+import Login from './components/Login.js';
 
 const store = createStore(rootReducer, applyMiddleware(thunk))
 console.log('store', store)
@@ -17,7 +18,10 @@ console.log('state is', store.getState())
 ReactDOM.render(
   <Provider store={store}>
     <Router>
-      <App />
+      <Switch>
+        <Route exact path='/' component={Login} />
+        <Route exact path='/home' component={withRouter(App)} />
+      </Switch>
     </Router>
   </Provider>, document.getElementById('root')
 );
