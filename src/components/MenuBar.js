@@ -1,13 +1,13 @@
 import React from 'react'
-import { fetchSong, fetchInput, logout } from '../actions/actions.js'
+import { fetchSong, fetchInput, logout, switchTabs } from '../actions/actions.js'
 import { connect } from 'react-redux'
-import { Input, Loader, List, Grid, Image, Menu } from 'semantic-ui-react';
+import { List, Image, Menu } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
-import { RingLoader, BeatLoader } from 'react-spinners';
+import { BeatLoader } from 'react-spinners';
 import UserHomePage from './UserHomePage'
 import SearchPage from './SearchPage'
 import PlaylistsContainer from './PlaylistsContainer'
-import { Route, withRouter } from 'react-router-dom';
+// import { Route, withRouter } from 'react-router-dom';
 
 
 class MenuBar extends React.Component{
@@ -26,14 +26,6 @@ class MenuBar extends React.Component{
     this.props.dispatchFetchInput(event.target.value)
   }
 
-  loading(){
-    return (
-      <div>
-          <Loader active inverted size="large">"Searching..."</Loader>
-          <Image floated={"right"} src={require('../img/loading.png')}/>
-      </div>
-      )
-  }
 
   showResults(){
     let songs = []
@@ -48,14 +40,15 @@ class MenuBar extends React.Component{
     return songs
   }
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
-  // <Menu.Item position="right">
-  // <Input size={"large"} focus placeholder="Enter song or artist..." onChange={this.fetchSongs}/>
-  // </Menu.Item>
+  handleItemClick = (e, { name }) => {
+    this.props.dispatchSwitchTabs()
+    this.setState({ activeItem: name })
+  }
+
   render(){
     return(
       <div>
-        <Menu pointing secondary color={"blue"}>
+        <Menu pointing secondary color={"blue"} size="massive">
           <Menu.Item>
             Hello, {this.props.user !== null ? this.props.user.username : <BeatLoader />}
           </Menu.Item>
@@ -81,7 +74,8 @@ const mapDispatchToProps = dispatch =>{
   return({
     dispatchFetchSong: (api_link) => dispatch(fetchSong(api_link)),
     dispatchFetchInput: bindActionCreators(fetchInput, dispatch),
-    dispatchLogout: ()=> dispatch(logout())
+    dispatchLogout: ()=> dispatch(logout()),
+    dispatchSwitchTabs: ()=> dispatch(switchTabs())
   })
 }
 

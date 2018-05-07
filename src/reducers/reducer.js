@@ -128,6 +128,18 @@ export default function rootReducer(state = defaultState, action) {
         playlists: null,
         currentPlaylistTracks: action.payload
       }
+    case "SWITCH_TABS":
+      return {
+        ...state,
+        selectedSong: false,
+        song: null,
+        annotation:{
+          addingAnnotation: false,
+          annotationHeight: null,
+          highlightedText: null,
+          showAnnotation: false
+        }
+      }
     case "LOGOUT":
       return defaultState
     default:

@@ -1,18 +1,18 @@
 import React from 'react'
-import { List, Image, Icon, Grid, Segment} from 'semantic-ui-react'
+import { List, Image, Grid, Segment} from 'semantic-ui-react'
 import { bindActionCreators } from 'redux';
 import { getPlaylists, playTrack, playSongLyrics } from '../actions/actions.js'
 import { connect } from 'react-redux'
 import { CircleLoader } from 'react-spinners';
-import SpotifyPlayer from 'react-spotify-player'
 import Lyrics from './Lyrics'
+import LyricsNotFound from './LyricsNotFound'
 import '../css/playlists.css'
 
 
 class Playlist extends React.Component {
   playTrack = (event) => {
     let id = event.target.parentNode.id
-    id === "" ? id = event.target.id : id = id
+    if(id === ""){id = event.target.id}
     this.props.dispatchPlayTrack(id)
     if(event.target.className==="content"){
       let search = event.target.textContent
@@ -36,6 +36,7 @@ class Playlist extends React.Component {
   }
 
   render(){
+    console.log(this.props.song)
     return (
       <Grid columns={2}>
       <Grid.Column width={4}>
@@ -46,7 +47,7 @@ class Playlist extends React.Component {
         </Segment>
       </Grid.Column>
       <Grid.Column width={12}>
-        {this.props.selectedSong ? (this.props.song !== null ? <Lyrics /> : <CircleLoader size={400} />) : null}
+        {this.props.selectedSong ? (this.props.song !== null ? (this.props.song.status === undefined ? <Lyrics />: <LyricsNotFound />) : <CircleLoader size={400} />) : null}
       </Grid.Column>
       </Grid>
     )

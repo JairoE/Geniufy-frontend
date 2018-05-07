@@ -1,7 +1,7 @@
 import React from 'react'
-import { Button, Segment, Divider, Card, Image, Grid } from 'semantic-ui-react'
+import { Button, Segment, Card, Image, Grid } from 'semantic-ui-react'
 import { bindActionCreators } from 'redux';
-import { getPlaylists, getPlaylistTracks } from '../actions/actions.js'
+import { getPlaylists, getPlaylistTracks, switchTabs } from '../actions/actions.js'
 import { connect } from 'react-redux'
 import { ScaleLoader } from 'react-spinners';
 import Playlist from './Playlist'
@@ -11,20 +11,21 @@ import '../css/playlists.css'
 class PlaylistsContainer extends React.Component{
 
   getPlaylist = (event) => {
+    this.props.dispatchSwitchTabs()
     this.props.dispatchGetPlaylistTracks(event.target.id)
   }
 
   showPlaylists = () => {
     return this.props.playlists.map((playlist)=>{
       let name = playlist.owner.display_name
-      name === null ? name = playlist.owner.id : name = name
+      if(name === null){name = playlist.owner.id}
       return <Grid.Column>
-          <Card>
+          <Card centered={true}>
         <Image src={playlist.images[0].url} />
-        <Card.Header>
+        <Card.Header textAlign={"center"}>
           {playlist.name}
         </Card.Header>
-        <Card.Meta>
+        <Card.Meta textAlign={"center"}>
           <span> Playlist created by {name}</span>
         </Card.Meta>
         <Button id={`${playlist.href}`} onClick={this.getPlaylist}>Play Playlist with Lyrics </Button>
@@ -33,7 +34,6 @@ class PlaylistsContainer extends React.Component{
     })
   }
   render(){
-    console.log(this.props)
     return (
       <div id="playlists">
         <Segment.Group>
@@ -61,7 +61,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return{
     dispatchGetPlaylists: bindActionCreators(getPlaylists, dispatch),
-    dispatchGetPlaylistTracks: bindActionCreators(getPlaylistTracks, dispatch)
+    dispatchGetPlaylistTracks: bindActionCreators(getPlaylistTracks, dispatch),
+    dispatchSwitchTabs: () => dispatch(switchTabs())
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(PlaylistsContainer)

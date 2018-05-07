@@ -1,9 +1,9 @@
 import React from 'react'
 import { fetchSong, fetchInput } from '../actions/actions.js'
 import { connect } from 'react-redux'
-import { Input, Loader, List, Grid, Image, Menu } from 'semantic-ui-react';
+import { Input, Loader, List, Image } from 'semantic-ui-react';
 import { bindActionCreators } from 'redux';
-import { RingLoader, BeatLoader, CircleLoader } from 'react-spinners';
+import { RingLoader, CircleLoader } from 'react-spinners';
 import Lyrics from './Lyrics';
 import "../css/searchpage.css"
 
@@ -13,7 +13,7 @@ class SearchBar extends React.Component{
   getSong = (event) => {
     event.preventDefault()
     let id = event.target.parentNode.id
-    id === "" ? id = event.target.id : id = id
+    if(id === ""){id = event.target.id }
     this.props.dispatchFetchSong(id)
     document.getElementById('search-bar').value=""
   }
@@ -51,7 +51,7 @@ class SearchBar extends React.Component{
         <div id="search-container">
           <Input id="search-bar" fluid size={"large"} focus placeholder="Enter song or artist..." onChange={this.fetchSongs}/>
           {!this.props.selectedSong ? ( <div id="list-container">
-            {this.props.searching ? <RingLoader size={400}/> : null}
+            {this.props.searching ? <div id="loader"> <RingLoader size={400}/></div> : null}
             {this.props.searchResults === null ? null : <List selection animated verticalAlign='top' size={"big"}> {this.showResults()} </List>}
             </div>
           ): null}

@@ -15,5 +15,9 @@ a.annotation:focus{
   line-height: 1.5;
 }
 
-#lyrics-container{
+#LyricsNotFound{
+  font-size: 150px;
+  line-height: 1.8;
+  font-family: 'Bungee Shade', cursive;
+  text-align: center;
 }

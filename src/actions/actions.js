@@ -99,6 +99,7 @@ export function spotifySignIn(code){
             .then(res=>res.json())
             .then(json=>{
               localStorage.setItem("jwt", json.code)
+              localStorage.setItem("spot", json.auth)
               dispatch({type:"SPOTIFY_SIGN_IN", payload: json})
             })
   }
@@ -183,4 +184,8 @@ export function playSongLyrics(song, artist){
 
 export let logout = () => {
   return({type:"LOGOUT"})
+}
+
+export let switchTabs = () => {
+  return({type:"SWITCH_TABS"})
 }
