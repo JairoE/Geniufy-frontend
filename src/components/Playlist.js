@@ -1,5 +1,5 @@
 import React from 'react'
-import { List, Image, Grid, Segment} from 'semantic-ui-react'
+import { List, Image, Grid, Segment, Button, Icon} from 'semantic-ui-react'
 import { bindActionCreators } from 'redux';
 import { getPlaylists, playTrack, playSongLyrics } from '../actions/actions.js'
 import { connect } from 'react-redux'
@@ -35,19 +35,67 @@ class Playlist extends React.Component {
     })
   }
 
+  prevSong = () =>{
+
+  }
+
+  nextSong = () => {
+
+  }
+
+  play = () => {
+    fetch('http://localhost:3000/api/v1/play',{
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': "application/json"
+      },
+      body: JSON.stringify({
+        jwt: localStorage.getItem('jwt'),
+      })
+    })
+  }
+
+  pause = () => {
+    fetch('http://localhost:3000/api/v1/pause',{
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': "application/json"
+      },
+      body: JSON.stringify({
+        jwt: localStorage.getItem('jwt'),
+      })
+    })
+  }
+
   render(){
     console.log(this.props.song)
     return (
       <Grid columns={2}>
       <Grid.Column width={4}>
-        <Segment style={{overflow: 'auto', maxHeight: 900 }}>
-        <List animated verticalAlign={"middle"}>
+        <Segment className="seg3Color" style={{overflow: 'auto', maxHeight: 900 }}>
+        <Button.Group icon fluid>
+        <Button onClick={this.prevSong}>
+          <Icon name='step backward' />
+        </Button>
+        <Button onClick={this.play}>
+          <Icon name='play' />
+        </Button>
+        <Button onClick={this.pause}>
+          <Icon name='pause' />
+        </Button>
+        <Button onClick={this.nextSong}>
+          <Icon name='step forward' />
+        </Button>
+      </Button.Group>
+        <List celled animated verticalAlign={"middle"}>
           {this.showTracks()}
         </List>
         </Segment>
       </Grid.Column>
       <Grid.Column width={12}>
-        {this.props.selectedSong ? (this.props.song !== null ? (this.props.song.status === undefined ? <Lyrics />: <LyricsNotFound />) : <CircleLoader size={400} />) : null}
+        {this.props.selectedSong ? (this.props.song !== null ? (this.props.song.status === undefined ? <Lyrics height={180}/>: <LyricsNotFound />) : <CircleLoader color={"#1e7aca"} size={600} />) : null}
       </Grid.Column>
       </Grid>
     )

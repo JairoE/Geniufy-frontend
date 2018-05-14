@@ -48,9 +48,9 @@ class MenuBar extends React.Component{
   render(){
     return(
       <div>
-        <Menu pointing secondary color={"blue"} size="massive">
+        <Menu pointing inverted size="massive">
           <Menu.Item>
-            Hello, {this.props.user !== null ? this.props.user.username : <BeatLoader />}
+            Hello, {this.props.user !== null ? this.props.user.username : <BeatLoader color={"#1e7aca"}/>}
           </Menu.Item>
           <Menu.Item>
             Geniufy

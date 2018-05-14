@@ -1,6 +1,7 @@
-.App {
-  background-color: #FFFFF0;
-  height: 100vh;
+#root{
+  background: repeating-linear-gradient(45deg, #080808, #080808 300px, #FFFFF0 300px, #FFFFF0 400px) ;
+  height: 100%;
+
 }
 
 .App-logo {
@@ -30,45 +31,19 @@
   margin-left: 30%;
 }
 
-#titles
-{
-	position: absolute;
-	width: 18em;
-	height: 50em;
-	bottom: 0;
-	left: 50%;
-	margin-left: -9em;
-	font-size: 350%;
-	font-weight: bold;
-	text-align: justify;
-	overflow: hidden;
-	transform-origin: 50% 100%;
-	transform: perspective(300px) rotateX(25deg);
+
+.segColor{
+  background-color: #e9ebee	 !important;
 }
 
-#titles:after
-{
-	position: absolute;
-	content: ' ';
-	left: 0;
-	right: 0;
-	top: 0;
-	bottom: 60%;
-	background-image: linear-gradient(top, rgba(0,0,0,1) 0%, transparent 100%);
-	pointer-events: none;
+.seg2Color{
+  background-color: #080808 !important;
 }
 
-#titlecontent
-{
-	position: absolute;
-	top: 100%;
-	animation: scroll 100s linear 4s infinite;
+.seg3Color{
+  background-color: #e9ebee	 !important;
 }
 
-@keyframes scroll {
-	0% { top: 100%; }
-	100% { top: -170%; }
-}
 
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }

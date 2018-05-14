@@ -19,9 +19,15 @@ class PlaylistsContainer extends React.Component{
     return this.props.playlists.map((playlist)=>{
       let name = playlist.owner.display_name
       if(name === null){name = playlist.owner.id}
+      let img = playlist.images
+      if (img.length === 0){
+        img = require('../img/loading.png')
+      }else {
+        img=img[0].url
+      }
       return <Grid.Column>
           <Card centered={true}>
-        <Image src={playlist.images[0].url} />
+        <Image src={img} />
         <Card.Header textAlign={"center"}>
           {playlist.name}
         </Card.Header>
@@ -37,12 +43,12 @@ class PlaylistsContainer extends React.Component{
     return (
       <div id="playlists">
         <Segment.Group>
-          <Segment padded>
+          <Segment className="seg2Color" style={{overflow: 'auto', maxHeight: 1000 }}>
             {this.props.playlists === null ? <Button color={"green"} onClick={this.props.dispatchGetPlaylists}>Get Playlists</Button> : null}
             {this.props.playlists !== null ? <Grid columns={3}> {this.showPlaylists()} </Grid> : null}
-            {this.props.loadingtracks ? <ScaleLoader size={1000} /> : null}
+            {this.props.loadingtracks ? <ScaleLoader height={280} width={32} margin={"16px"} color={"#1e7aca"}/> : null}
           </Segment>
-          {this.props.tracks !== null ? <Segment compact={true}> <Playlist /> </Segment>: null}
+          {this.props.tracks !== null ? <Segment className="seg2Color"compact={true}> <Playlist /> </Segment>: null}
         </Segment.Group>
       </div>
     )

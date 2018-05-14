@@ -4,6 +4,14 @@
 }
 
 #list-container{
+  background-color: #080808;
   padding-top: 1%;
   padding-left: 5%;
+  padding-right: 5%;
+  padding-bottom: 1%;
+}
+
+#search-results{
+  background-color: #e9ebee;
+
 }

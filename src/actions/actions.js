@@ -1,3 +1,6 @@
+import utf8 from 'utf8'
+import base64 from 'base-64'
+
 export let highlightHandler = (selectedObject, height) => {
 
   let typeString = "ALREADY_HIGHLIGHTED"
@@ -78,8 +81,28 @@ export function fetchAnnotation(songId, annotationId, annotationHeight){
     return fetch(`http://localhost:3000/api/v1/songs/${songId}/annotations/${annotationId}`)
           .then(res=>res.json())
           .then(json=>{
-            dispatch({type: "SHOW_ANNOTATION", payload: { annotationAndUser: json, height: annotationHeight}})
+            dispatch({type: "SHOW_ANNOTATION", payload: { annotations: json, height: annotationHeight}})
           })
+  }
+}
+
+export function chainAnnotation(songId, annotationId, text){
+  return (dispatch) => {
+    return fetch(`http://localhost:3000/api/v1/songs/${songId}/annotations/${annotationId}/chainAnnotation`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': "application/json"
+      },
+      body: JSON.stringify({
+        annotationText: text,
+        jwt: localStorage.getItem('jwt')
+      })
+    })
+    .then(res=>res.json())
+    .then(json=>{
+      dispatch({type: "CHAINED_ANNOTAION"})
+    })
   }
 }
 
@@ -98,8 +121,10 @@ export function spotifySignIn(code){
           })
             .then(res=>res.json())
             .then(json=>{
+              let text = utf8.encode(json.auth)
+              let encoded = base64.encode(text)
               localStorage.setItem("jwt", json.code)
-              localStorage.setItem("spot", json.auth)
+              localStorage.setItem("spot", encoded)
               dispatch({type:"SPOTIFY_SIGN_IN", payload: json})
             })
   }

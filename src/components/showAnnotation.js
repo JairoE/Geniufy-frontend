@@ -1,31 +1,69 @@
 import React from 'react';
-import { Comment, Segment} from 'semantic-ui-react';
+import { Comment, Segment, Form, Button} from 'semantic-ui-react';
 import { connect } from 'react-redux';
-// import { bindActionCreators } from 'redux';
+import { bindActionCreators } from 'redux';
+import { chainAnnotation } from '../actions/actions.js'
 
-const ShowAnnotation = props => {
+class ShowAnnotation extends React.Component {
 
-  return(
-    <Segment style={{top: `${props.annotationHeight-140}px`}}>
-      <Comment.Group>
-        <Comment>
-          <Comment.Avatar src={require('../img/userIcon.jpg')} />
-          <Comment.Content>
-            <Comment.Author as="p">{props.annotationUser}</Comment.Author>
-            <Comment.Text> <p>{props.annotationText}</p> </Comment.Text>
-          </Comment.Content>
-        </Comment>
-      </Comment.Group>
-    </Segment>
-  )
+  createChain = (event) => {
+    let text = event.target.children[0].children[0].value
+    this.props.dispatchAnnotationChain(this.props.songId, this.props.annotations[0].annotation.id, text)
+  }
+
+  generateForm = () => {
+    return(
+      <Form onSubmit={this.createChain}>
+        <Form.TextArea placeholder="Enter your reply/annotation here!"/>
+        <Button content='Add/Reply to the Annotation!' labelPosition='left' icon='edit' primary />
+      </Form>
+    )
+  }
+
+  showAnnotations = () => {
+    let annotations = this.props.annotations.map((annotationObj) => {
+              return(
+              <Comment>
+                <Comment.Avatar src={require('../img/userIcon.jpg')} />
+                <Comment.Content>
+                  <Comment.Author as="p">{annotationObj.username}</Comment.Author>
+                  <Comment.Text> <p>{annotationObj.annotation.annotation}</p> </Comment.Text>
+                </Comment.Content>
+              </Comment>
+            )
+            })
+    if (this.props.annotations[this.props.annotations.length - 1].username !== this.props.username){
+      annotations.push(this.generateForm())
+      return annotations
+    }else{
+      return annotations
+    }
+  }
+
+  render(){
+    return(
+      <Segment style={{top: `${this.props.annotationHeight - this.props.subtractHeight}px`}}>
+        <Comment.Group>
+          {this.showAnnotations()}
+        </Comment.Group>
+      </Segment>
+    )
+  }
 }
 
 const mapStateToProps = state => {
   return {
-    annotationText: state.annotation.showAnnotation.annotation.annotation,
-    annotationUser: state.annotation.showAnnotation.username,
+    username: state.user.username,
+    songId: state.song.id,
+    annotations: state.annotation.showAnnotation,
     annotationHeight: state.annotation.annotationHeight
   }
 }
 
-export default connect(mapStateToProps)(ShowAnnotation);
+const mapDispatchToProps = dispatch => {
+  return {
+    dispatchAnnotationChain: bindActionCreators(chainAnnotation, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ShowAnnotation);

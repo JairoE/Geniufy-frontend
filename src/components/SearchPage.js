@@ -50,12 +50,14 @@ class SearchBar extends React.Component{
       <div>
         <div id="search-container">
           <Input id="search-bar" fluid size={"large"} focus placeholder="Enter song or artist..." onChange={this.fetchSongs}/>
-          {!this.props.selectedSong ? ( <div id="list-container">
-            {this.props.searching ? <div id="loader"> <RingLoader size={400}/></div> : null}
+          <div id="list-container">
+          {!this.props.selectedSong ? (<div id="search-results">
+            {this.props.searching ? <div id="loader"> <RingLoader size={500} color={"#1e7aca"}/></div> : null}
             {this.props.searchResults === null ? null : <List selection animated verticalAlign='top' size={"big"}> {this.showResults()} </List>}
             </div>
           ): null}
-          {this.props.selectedSong ? (this.props.song !== null ? <Lyrics /> : <CircleLoader size={400} />) : null}
+          {this.props.selectedSong ? (this.props.song !== null ? <Lyrics height={130}/> : <CircleLoader size={600} color={"#1e7aca"}/>) : null}
+          </div>
         </div>
       </div>
     )

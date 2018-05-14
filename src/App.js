@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 // import {Route, Switch, withRouter} from 'react-router-dom';
 import { spotifySignIn } from './actions/actions.js'
 import Script from 'react-load-script'
+import utf8 from 'utf8'
+import base64 from 'base-64'
 
 class App extends Component {
   componentDidMount(){
@@ -27,7 +29,9 @@ class App extends Component {
     window.onSpotifyWebPlaybackSDKReady = () => {
       console.log("The Web Playback SDK is ready. We have access to Spotify.Player");
       console.log(window.Spotify.Player);
-      const token = localStorage.getItem("spot");
+      let text = base64.decode(localStorage.getItem("spot"));
+      let dec = utf8.decode(text)
+      const token = dec;
       const player = new window.Spotify.Player({
       name: 'Music Player',
       getOAuthToken: cb => { cb(token); }

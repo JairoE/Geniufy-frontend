@@ -85,9 +85,17 @@ export default function rootReducer(state = defaultState, action) {
         ...state,
         annotation: {
           ...state.annotation,
-          showAnnotation: action.payload.annotationAndUser,
+          showAnnotation: action.payload.annotations,
           annotationHeight: action.payload.height,
           addingAnnotation: false
+        }
+      }
+    case "CHAINED_ANNOTAION":
+      return {
+        ...state,
+        annotation: {
+          addingAnnotation: false,
+          highlightedText: null
         }
       }
     case "LOADING_SONG":

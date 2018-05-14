@@ -10,6 +10,7 @@ import thunk from 'redux-thunk';
 import 'semantic-ui-css/semantic.min.css';
 import { BrowserRouter as Router, Route, withRouter, Switch} from 'react-router-dom';
 import Login from './components/Login.js';
+import Lyrics from './components/Lyrics.js'
 
 const store = createStore(rootReducer, applyMiddleware(thunk))
 console.log('store', store)
@@ -21,6 +22,7 @@ ReactDOM.render(
       <Switch>
         <Route exact path='/' component={Login} />
         <Route exact path='/home' component={withRouter(App)} />
+        <Route path='/song/:id' component={withRouter(Lyrics)} />
       </Switch>
     </Router>
   </Provider>, document.getElementById('root')

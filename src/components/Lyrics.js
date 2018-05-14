@@ -9,7 +9,9 @@ import AnnotationForm from './AnnotationForm';
 import ShowAnnotation from './showAnnotation';
 
 class Lyrics extends React.Component{
-
+  // componentDidMount(){
+  //   this.props.history.push(`/song/${this.props.song.name}-lyrics`)
+  // }
   highlightHandler = (event) => {
     this.props.dispatchHighlightHandler(window.getSelection(), event.pageY)
   }
@@ -35,7 +37,7 @@ class Lyrics extends React.Component{
               <Header as="h3" attached='top'>
               {this.props.song.name} by {this.props.song.artist}
               </Header>
-              <Segment attached style={{overflow: 'auto', maxHeight: 850 }}>{Lyrics}</Segment>
+              <Segment className="segColor" attached style={{overflow: 'auto', maxHeight: 850 }}>{Lyrics}</Segment>
               </div>
           )
   }
@@ -48,8 +50,8 @@ class Lyrics extends React.Component{
         </Grid.Column>
         <Grid.Column width={4}>
         <div id="right-column-container">
-          {this.props.addingAnnotation ? <AnnotationForm />: null}
-          {this.props.showAnnotation ? <ShowAnnotation /> : null}
+          {this.props.addingAnnotation ? <AnnotationForm subtractHeight={this.props.height}/>: null}
+          {this.props.showAnnotation ? <ShowAnnotation subtractHeight={this.props.height}/> : null}
         </div>
         </Grid.Column>
       </Grid>

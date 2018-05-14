@@ -13,7 +13,7 @@ class AnnotationForm extends React.Component{
 
   render(){
     return(
-      <Segment style={{top: `${this.props.annotationHeight-140}px`}}>
+      <Segment style={{top: `${this.props.annotationHeight- this.props.subtractHeight}px`}}>
           <Form onSubmit={this.addAnnotation}>
             <TextArea placeholder="Add annotation here!" />
             <Button> Submit Annotation </Button>
